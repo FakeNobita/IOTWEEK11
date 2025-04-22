@@ -45,6 +45,13 @@
             color: #333;
         }
 
+        .question-image {
+            width: 100%; /* Make sure the image takes up full width */
+            max-width: 300px; /* Set a maximum width */
+            margin: 20px auto; /* Center the image */
+            display: block;
+        }
+
         .options-container {
             display: flex;
             flex-direction: column;
@@ -289,7 +296,7 @@ const questions = [
 
 
 
-        let selectedAnswers = {};
+let selectedAnswers = {};
         let submitted = false;
 
         function createQuiz() {
@@ -301,8 +308,9 @@ const questions = [
                 
                 questionCard.innerHTML = `
                     <div class="question-text">Q${question.id}. ${question.question}</div>
+                    ${question.image ? `<img src="${question.image}" alt="Image for question ${question.id}" class="question-image">` : ''}
                     <div class="options-container">
-                        ${question.options.map((option, index) => ` 
+                        ${question.options.map((option, index) => `
                             <label class="option" data-question="${question.id}" data-option="${index}">
                                 <input type="radio" name="question${question.id}" value="${index}">
                                 ${option}
@@ -318,15 +326,6 @@ const questions = [
                     </div>
                 `;
                 
-                // Add image if exists
-                if (question.imageURL) {
-                    const imageElement = document.createElement('img');
-                    imageElement.src = question.imageURL;
-                    imageElement.alt = `Image for Q${question.id}`;
-                    imageElement.style.width = '500px';  // Adjust width as needed
-                    questionCard.appendChild(imageElement);
-                }
-
                 quizContainer.appendChild(questionCard);
             });
 
