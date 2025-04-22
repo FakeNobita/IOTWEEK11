@@ -189,7 +189,8 @@ const questions = [
       "IP network is used to induce more congestion"
     ],
     correctAnswer: 1,
-    explanation: "IP network connects smart grid components globally for seamless data transfer. Lecture 51@23:00."
+    explanation: "IP network connects smart grid components globally for seamless data transfer. Lecture 51@23:00.",
+    imageURL: "https://raw.githubusercontent.com/FakeNobita/IOTWEEK9/main/Images/iotweek11q4.png"
   },
   {
     id: 5,
@@ -301,7 +302,7 @@ const questions = [
                 questionCard.innerHTML = `
                     <div class="question-text">Q${question.id}. ${question.question}</div>
                     <div class="options-container">
-                        ${question.options.map((option, index) => `
+                        ${question.options.map((option, index) => ` 
                             <label class="option" data-question="${question.id}" data-option="${index}">
                                 <input type="radio" name="question${question.id}" value="${index}">
                                 ${option}
@@ -317,6 +318,15 @@ const questions = [
                     </div>
                 `;
                 
+                // Add image if exists
+                if (question.imageURL) {
+                    const imageElement = document.createElement('img');
+                    imageElement.src = question.imageURL;
+                    imageElement.alt = `Image for Q${question.id}`;
+                    imageElement.style.width = '500px';  // Adjust width as needed
+                    questionCard.appendChild(imageElement);
+                }
+
                 quizContainer.appendChild(questionCard);
             });
 
