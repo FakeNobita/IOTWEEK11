@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOT NPTEL WEEK-11</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e5e5;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background-color: #f8f8f8;
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+        }
+
+        .option.correct {
+            background-color: #ecfdf5;
+        }
+
+        .option.wrong {
+            background-color: #fef2f2;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+        }
+
+        .feedback {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e5e5;
+            display: none;
+        }
+
+        .feedback.visible {
+            display: block;
+        }
+
+        .result-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .result-icon.correct {
+            color: #059669;
+        }
+
+        .result-icon.wrong {
+            color: #dc2626;
+        }
+
+        .explanation {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .score {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background-color: #2563eb;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IOT NPTEL WEEK-11</h1>
+        <div id="quiz-container"></div>
+        <div class="controls">
+            <div id="score" class="score"></div>
+            <button id="submit-btn" class="button">Submit Answers</button>
+        </div>
+    </div>
+
+    <script>
+const questionsWeek11 = [
+  {
+    id: 1,
+    question: "Which among the following is the most probable application scenario for a smart grid?",
+    options: ["Home automation", "Hospital networks", "Intelligent power plants", "Crop monitoring"],
+    correctAnswer: 2,
+    explanation: "Intelligent power plants are a primary application scenario for a smart grid. Lecture 51@4:20."
+  },
+  {
+    id: 2,
+    question: "With respect to a smart grid, which stakeholders are potentially benefitted?",
+    options: ["Energy Service providers", "Energy consumers/customers", "Both energy service providers and consumers", "Neither energy service providers nor consumers."],
+    correctAnswer: 2,
+    explanation: "Both energy service providers and consumers benefit from a smart grid. Lecture 51@13:20."
+  },
+  {
+    id: 3,
+    question: "It is not possible to perform load forecasting using a smart grid.",
+    options: ["True", "False"],
+    correctAnswer: 1,
+    explanation: "Load forecasting is indeed possible in a smart grid. Lecture 51@22:00."
+  },
+  {
+    id: 4,
+    question: "With respect to the following Smart Grid architecture, which among the following is the most probable utility of the IP network?",
+    options: [
+      "IP network has no utility",
+      "IP network is used to connect smart grid components globally for seamless data transfer",
+      "IP network is used for multimedia video streaming only",
+      "IP network is used to induce more congestion"
+    ],
+    correctAnswer: 1,
+    explanation: "IP network connects smart grid components globally for seamless data transfer. Lecture 51@23:00."
+  },
+  {
+    id: 5,
+    question: "Smart Home is an isolated concept and is not integrable with smart grid?",
+    options: ["False", "True"],
+    correctAnswer: 0,
+    explanation: "Smart home is integrable with a smart grid. Lecture 51@28:01."
+  },
+  {
+    id: 6,
+    question: "Which of the following is a cloud application of smart grid?",
+    options: ["Information management", "Energy management", "Security", "All of these"],
+    correctAnswer: 3,
+    explanation: "All of these are cloud applications in a smart grid. Lecture 52@21:55."
+  },
+  {
+    id: 7,
+    question: "Which of the following is not a vulnerability of Smart Grid?",
+    options: ["Integrity", "Physical threats", "Dynamic system attacks", "None of these"],
+    correctAnswer: 3,
+    explanation: "All options are vulnerabilities of smart grids. Lecture 52@16:56."
+  },
+  {
+    id: 8,
+    question: "IIoT corresponds to which industrial revolution?",
+    options: ["1st", "2nd", "3rd", "4th"],
+    correctAnswer: 3,
+    explanation: "IIoT corresponds to the 4th industrial revolution. Lecture 53@10:00."
+  },
+  {
+    id: 9,
+    question: "IIoT is inherently data intensive.",
+    options: ["Yes", "No"],
+    correctAnswer: 0,
+    explanation: "IIoT is inherently data intensive due to big data analytics. Lecture 53@16:28."
+  },
+  {
+    id: 10,
+    question: "Which among the following is one of the requirements and utility of IIoT?",
+    options: [
+      "Power plant interruption",
+      "Power plant virtualization",
+      "Power plant decentralization",
+      "Power plant denotification"
+    ],
+    correctAnswer: 1,
+    explanation: "Power plant virtualization is an important aspect of IIoT. Lecture 53@20:17."
+  },
+  {
+    id: 11,
+    question: "Smart Grid follows which type of flow of energy?",
+    options: ["Bidirectional", "Unidirectional", "Both a and b", "Neither a nor b"],
+    correctAnswer: 0,
+    explanation: "Smart grid follows bidirectional flow of energy. Lecture 51@5:41."
+  },
+  {
+    id: 12,
+    question: "What is the Flow of data?",
+    options: [
+      "Acquisition>Generation>Storage>Analysis",
+      "Generation>Storage>Analysis>Acquisition",
+      "Generation>Acquisition>Storage>Analysis",
+      "None of these"
+    ],
+    correctAnswer: 2,
+    explanation: "The flow of data is Generation > Acquisition > Storage > Analysis. Lecture 55@19:29."
+  },
+  {
+    id: 13,
+    question: "Intelligent transport system is least likely to render which of the following connectivity?",
+    options: [
+      "Vehicle-to-vehicle connectivity",
+      "Vehicle-to-sensor connectivity",
+      "Vehicle-to-road infrastructure",
+      "Vehicle-to-home connectivity"
+    ],
+    correctAnswer: 3,
+    explanation: "ITS is least likely to render vehicle-to-home connectivity. Lecture 54@4:19."
+  },
+  {
+    id: 14,
+    question: "Approximately around ________ of the total data available currently in the world is unstructured.",
+    options: ["20 %", "40 %", "60 %", "80%"],
+    correctAnswer: 3,
+    explanation: "80% of total data is unstructured. Lecture 55@9:23."
+  },
+  {
+    id: 15,
+    question: "SQL manages ________________ data.",
+    options: ["Unstructured", "Corrupt", "Structured", "Non-organized"],
+    correctAnswer: 2,
+    explanation: "SQL manages structured data. Lecture 55@8:56."
+  }
+];
+
+
+
+
+        let selectedAnswers = {};
+        let submitted = false;
+
+        function createQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            
+            questions.forEach(question => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                
+                questionCard.innerHTML = `
+                    <div class="question-text">Q${question.id}. ${question.question}</div>
+                    <div class="options-container">
+                        ${question.options.map((option, index) => `
+                            <label class="option" data-question="${question.id}" data-option="${index}">
+                                <input type="radio" name="question${question.id}" value="${index}">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${question.id}">
+                        <div class="result-icon">
+                            <span class="icon"></span>
+                            <span class="result-text"></span>
+                        </div>
+                        <div class="explanation">${question.explanation}</div>
+                    </div>
+                `;
+                
+                quizContainer.appendChild(questionCard);
+            });
+
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', handleOptionSelect);
+            });
+
+            document.getElementById('submit-btn').addEventListener('click', handleSubmit);
+        }
+
+        function handleOptionSelect(event) {
+            if (submitted) return;
+
+            const questionId = parseInt(event.currentTarget.dataset.question);
+            const optionIndex = parseInt(event.currentTarget.dataset.option);
+
+            selectedAnswers[questionId] = optionIndex;
+
+            const questionOptions = document.querySelectorAll(`.option[data-question="${questionId}"]`);
+            questionOptions.forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            const radioButton = event.currentTarget.querySelector('input[type="radio"]');
+            radioButton.checked = true;
+        }
+
+        function handleSubmit() {
+            if (Object.keys(selectedAnswers).length < questions.length) {
+                alert("Please answer all questions before submitting!");
+                return;
+            }
+
+            submitted = true;
+            let score = 0;
+
+            questions.forEach(question => {
+                const isCorrect = selectedAnswers[question.id] === question.correctAnswer;
+                if (isCorrect) score++;
+
+                const feedback = document.getElementById(`feedback-${question.id}`);
+                feedback.classList.add('visible');
+
+                const resultIcon = feedback.querySelector('.result-icon');
+                const resultText = feedback.querySelector('.result-text');
+                
+                if (isCorrect) {
+                    resultIcon.classList.add('correct');
+                    resultText.textContent = 'Correct Answer +1';
+                } else {
+                    resultIcon.classList.add('wrong');
+                    resultText.textContent = 'Wrong Answer +0';
+                }
+
+                const options = document.querySelectorAll(`.option[data-question="${question.id}"]`);
+                options.forEach((option, index) => {
+                    if (index === question.correctAnswer) {
+                        option.classList.add('correct');
+                    } else if (index === selectedAnswers[question.id]) {
+                        option.classList.add('wrong');
+                    }
+                });
+            });
+
+            document.getElementById('score').textContent = `Score: ${score}/${questions.length}`;
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.textContent = 'Try Again';
+            submitBtn.removeEventListener('click', handleSubmit);
+            submitBtn.addEventListener('click', resetQuiz);
+        }
+
+        function resetQuiz() {
+            location.reload();
+        }
+
+        createQuiz();
+    </script>
+</body>
+</html>
